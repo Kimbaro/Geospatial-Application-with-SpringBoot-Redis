@@ -50,10 +50,16 @@ public class GeoDataServiceImpl implements GeoDataService {
     public GeoData nearBy(Double longitude, Double latitude, Double km) {
         Circle circle = new Circle(new Point(longitude, latitude), new Distance(km, Metrics.KILOMETERS));
         GeoResults<RedisGeoCommands.GeoLocation<String>> res = geoOperations.radius(KEY, circle);
-        GeoResults<RedisGeoCommands.GeoLocation<String>> results = geoOperations
-                .search("geoPoints", circle);
-        results.getContent().stream().forEach(System.out::println);
-        
+
+        for(GeoResult<RedisGeoCommands.GeoLocation<String>> result : res) {
+            RedisGeoCommands.GeoLocation<String> location = result.getContent();
+
+            String nearbyUserName = location.getName();
+
+            // 중심 좌표로부터의 거리를 기준으로 level 지정
+            double distance = result.getDistance().getValue();
+            log.info("search result -> nearbyUserName={} distance={}",nearbyUserName,distance);
+        }
         return null;
     }
 

@@ -3,10 +3,12 @@ package com.template.redis.geospatialapplicationwithspringbootredis.controller;
 import com.template.redis.geospatialapplicationwithspringbootredis.dto.GeoDataDto;
 import com.template.redis.geospatialapplicationwithspringbootredis.service.GeoDataServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 @RequestMapping("/test")
 @RequiredArgsConstructor
 public class TestController {
@@ -19,8 +21,12 @@ public class TestController {
     }
 
     @GetMapping("/near-by")
-    public ResponseEntity<String> findIp(Double longitude, Double latitude, Double km) {
-        geoDataService.nearBy(longitude, latitude, km).toString();
+    public ResponseEntity<String> findIp(
+            @RequestParam(name = "longitude") Double longitude,
+            @RequestParam(name = "latitude") Double latitude,
+            @RequestParam(name = "km") Double km) {
+
+        geoDataService.nearBy(longitude, latitude, km);
         return ResponseEntity.ok("");
     }
 
