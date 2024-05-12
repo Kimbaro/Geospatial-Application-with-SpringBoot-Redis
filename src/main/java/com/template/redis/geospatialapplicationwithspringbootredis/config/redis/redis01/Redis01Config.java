@@ -1,18 +1,15 @@
-package com.template.redis.geospatialapplicationwithspringbootredis.config.redis.redis00;
+package com.template.redis.geospatialapplicationwithspringbootredis.config.redis.redis01;
 
 import com.template.redis.geospatialapplicationwithspringbootredis.config.redis.configProps.RedisDataSource;
 import com.template.redis.geospatialapplicationwithspringbootredis.db.redis00.entity.GeoData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -21,36 +18,31 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.time.Duration;
-
-import static java.util.Collections.singletonMap;
 
 @Configuration
 @Slf4j
-/**
- * https://medium.com/@raphael3213/multiple-redis-connections-in-spring-boot-37f632e8e64f
- * */
-public class Redis00Config {
+public class Redis01Config {
 
-    @Bean(name = "redis00Template")
-    public RedisTemplate<String, Object> redis00Template(@Qualifier("redis00ConnectionFactory") LettuceConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    @Bean(name = "redis01Template")
+    public RedisTemplate<String, String> redis01Template(@Qualifier("redis01ConnectionFactory") LettuceConnectionFactory connectionFactory) {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         return redisTemplate;
     }
 
-    @Bean(name = "redis00ConnectionFactory")
-    public LettuceConnectionFactory redis00ConnectionFactory(@Qualifier("redis00RedisDataSource") RedisDataSource redisDataSource) {
+    @Bean(name = "redis01ConnectionFactory")
+    public LettuceConnectionFactory redis01ConnectionFactory(@Qualifier("redis01RedisDataSource") RedisDataSource redisDataSource) {
         LettuceConnectionFactory lettuceConnectionFactory =
                 new LettuceConnectionFactory(redisDataSource.getHOST(), redisDataSource.getPORT());
-        lettuceConnectionFactory.setDatabase(14);
+        lettuceConnectionFactory.setPassword(redisDataSource.getPASSWORD());
+        lettuceConnectionFactory.setDatabase(15);
         return lettuceConnectionFactory;
     }
 
-    @Bean(name = "redis00RedisDataSource")
-    @ConfigurationProperties(prefix = "spring.datasources.nosql.redis.redis00")
+    @Bean(name = "redis01RedisDataSource")
+    @ConfigurationProperties(prefix = "spring.datasources.nosql.redis.redis01")
     public RedisDataSource redis01DataSource() {
         return RedisDataSource.builder().build();
     }

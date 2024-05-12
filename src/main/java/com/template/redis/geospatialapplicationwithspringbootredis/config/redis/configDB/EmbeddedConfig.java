@@ -3,13 +3,10 @@ package com.template.redis.geospatialapplicationwithspringbootredis.config.redis
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import redis.embedded.RedisServer;
-
+import org.springframework.data.redis.connection.RedisServer;
 import java.io.IOException;
 import java.util.Date;
 
@@ -25,7 +22,7 @@ public class EmbeddedConfig {
 
     private RedisServer redisServer;
 
-    @PostConstruct
+//    @PostConstruct
     public void startRedis() throws IOException {
         redisServer = RedisServer.builder()
                 .setting("maxmemory 128M")
@@ -47,7 +44,7 @@ public class EmbeddedConfig {
         }
     }
 
-    @PreDestroy
+//    @PreDestroy
     public void stopRedis() {
         redisServer.stop();
     }

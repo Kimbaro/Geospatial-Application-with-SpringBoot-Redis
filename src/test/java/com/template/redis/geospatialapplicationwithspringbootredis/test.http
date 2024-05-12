@@ -1,0 +1,19 @@
+GET http://localhost:8079/api/v1/test/find-all-ip
+Accept: application/json
+
+###
+
+GET http://localhost:8079/api/v1/test/near-by?longitude=126.974528&latitude=37.635670&km=100
+Accept: application/json
+
+###
+
+POST http://localhost:8079/api/v1/test/save-new-location
+Content-Type: application/json
+
+{
+  "longitude": "126.974528",
+  "latitude": "37.635670 "
+}
+
+###

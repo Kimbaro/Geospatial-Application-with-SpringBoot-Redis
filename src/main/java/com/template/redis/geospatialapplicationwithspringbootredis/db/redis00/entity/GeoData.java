@@ -6,14 +6,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Data
-@RedisHash(value = "ipTableCache")
+@RedisHash(value = "geoData")
 @Builder
 public class GeoData implements Serializable {
     @Id
-    private String uuid;
+    private UUID uuid = UUID.randomUUID();
     private String longitude;
     private String latitude;
-    private String geoHash;
 }
